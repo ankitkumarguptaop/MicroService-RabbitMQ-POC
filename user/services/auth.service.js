@@ -42,6 +42,7 @@ exports.signIn = async (payload) => {
     throw new ForBidden("Need to register First!");
   }
   if (await user.matchPassword(password)) {
+    producer.publishMessageFanout("", user, "notification")
     return { token: generateToken(user._id), user: user };
   } else {
     throw new UnAuthorized("Unauthorised access!");
